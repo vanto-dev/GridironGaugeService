@@ -1,8 +1,8 @@
 import json
 
 
-def get_wrs():
-    database_path = "./sleeper_api_response.json"
+def get_player_list(pos):
+    database_path = "sleeper_api_response.json"
 
     with open(database_path, 'r') as file:
         database = json.load(file)
@@ -10,7 +10,7 @@ def get_wrs():
     player_dict = {}
 
     for key, value in database.items():
-        if value["position"] in ["WR"]:
+        if value["position"] in [pos]:
             player_dict[key] = value
 
     return player_dict

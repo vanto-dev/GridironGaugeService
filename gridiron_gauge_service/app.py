@@ -2,7 +2,7 @@ from flask import Flask
 import psycopg2
 from flask_cors import CORS
 
-from gridiron_gauge_service.search_sleeper_json import get_wrs
+from gridiron_gauge_service.search_sleeper_json import get_player_list
 
 app = Flask(__name__)
 CORS(app)
@@ -10,7 +10,7 @@ CORS(app)
 
 @app.route("/api/wide_receiver_data")
 def get_wide_receiver_data():
-    wr_dict = get_wrs()
+    wr_dict = get_player_list("WR")
     wr_info_response = []
 
     conn = psycopg2.connect(
@@ -44,12 +44,9 @@ def get_wide_receiver_data():
             player_entry["score"] = tgts
 
             espn_id = search_sleeper_response_for_wr(name, wr_dict)
-            if espn_id == "no id found":
-                player_entry["playerPhoto"] = ("https://www.pro-"
-                                               "football-reference.com/req/20230307/images/headshots/StxxAm00_2022.jpg")
-            else:
-                player_entry["playerPhoto"] = ("https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/" +
-                                               str(espn_id) + ".png&w=350&h=254")
+
+            player_entry["playerPhoto"] = ("https://a.espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/" +
+                                           str(espn_id) + ".png&w=350&h=254")
 
             wr_info_response.append(player_entry)
 

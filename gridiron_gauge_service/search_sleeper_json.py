@@ -2,7 +2,7 @@ import json
 
 
 def get_player_list(pos):
-    database_path = "sleeper_api_response.json"
+    database_path = "WR_API/sleeper_api_response.json"
 
     with open(database_path, 'r') as file:
         database = json.load(file)

@@ -3,6 +3,7 @@ import psycopg2
 from flask_cors import CORS
 
 from gridiron_gauge_service.search_sleeper_json import get_player_list
+from gridiron_gauge_service.WR_API.GG_algorithm import get_score
 
 app = Flask(__name__)
 CORS(app)
@@ -25,7 +26,7 @@ def get_wide_receiver_data():
     cur = conn.cursor()
 
     # SQL query to retrieve player names
-    select_query = "SELECT rank, name, TGTS FROM wr_stats_table_2022"
+    select_query = "SELECT rank, name, tgts FROM wr_stats_table_2022"
 
     # Execute the query
     cur.execute(select_query)
@@ -41,7 +42,9 @@ def get_wide_receiver_data():
         if name:
 
             player_entry["name"] = name
-            player_entry["score"] = tgts
+            player_entry["score"] = get_score(name)
+            if player_entry["score"] == 0.0:
+                continue
 
             espn_id = search_sleeper_response_for_wr(name, wr_dict)
 
